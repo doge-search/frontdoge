@@ -1,3 +1,89 @@
 body {
 	background-image: url(../images/lines.jpg);
+	font-family: Arial;
+	overflow: hidden;
+}
+
+.page {
+	position: absolute;
+	width: 5%;
+	left: 50%;
+	top: 50px;
+	bottom: 50px;
+}
+
+.page > .container {
+	position: absolute;
+	width: 900%;
+	height: 100%;
+	border: none;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	box-shadow: 3px 3px 10px rgba(211, 211, 211, 0.5);
+	background-color: rgb(244, 244, 244);
+	margin-left: -450%;
+}
+
+.page > .container > .padding {
+	position: absolute;
+	left: 20px;
+	right: 20px;
+	height: 100%;
+}
+
+.select-container {
+	position: absolute;
+	top: 120px;
+	bottom: 20px;
+	right: 0;
+	width: 30px;
+}
+
+.select-table {
+	display: table;
+	width: 100%;
+	height: 100%;
+}
+
+.select-table > div {
+	display: table-row;
+	color: rgb(155, 155, 155);
+	font-size: 10px;
+}
+
+.select-table > div > span {
+	display: table-cell;
+	vertical-align: middle;
+	-ms-user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	cursor: default;
+	text-align: right;
+}
+
+.select-table > div > span:before {
+	content: '·';
+}
+
+.select-table > div:hover {
+	color: rgb(100, 200, 255);
+}
+
+.select-content {
+	position: absolute;
+	top: 120px;
+	bottom: 20px;
+	left: 0;
+	right: 30px;
+	overflow: hidden;
+}
+
+.select-content a {
+	text-decoration: none;
+	color: rgb(100, 100, 100);
+}
+
+.select-content a:hover {
+	text-decoration: none;
+	color: rgb(100, 200, 255);
 }
