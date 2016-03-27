@@ -4,6 +4,15 @@ body {
 	overflow: hidden;
 }
 
+.content {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	overflow: hidden;
+}
+
 .page {
 	position: absolute;
 	width: 5%;
@@ -112,4 +121,53 @@ body {
 .select-content a:hover {
 	text-decoration: none;
 	color: rgb(100, 200, 255);
+}
+
+.fullscreen {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	display: none;
+	background-color: rgba(0, 0, 0, 0.6);
+	z-index: 100;
+}
+
+.fullscreen > .container {
+	position: absolute;
+	left: 50%;
+	top: 60px;
+}
+
+.fullscreen > .container > .padding {
+	width: 100%;
+	height: 100%;
+	margin-left: -50%;
+}
+
+.fullscreen #head {
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.fullscreen #head > img {
+	background-color: white;
+	max-height: 200px;
+	max-width: 200px;
+	padding: 6px 6px 6px 6px;
+}
+
+#detail-content {
+	color: rgb(244, 244, 244);
+	text-align: center;
+	width: 100%;
+}
+
+.blur {
+	-moz-filter: blur(3px);
+	-webkit-filter: blur(3px);
+	-o-filter: blur(3px);
+	-ms-filter: blur(3px);
+	filter: blur(3px);
 }

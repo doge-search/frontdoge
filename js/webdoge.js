@@ -1,6 +1,23 @@
 school_list = ["MIT", "Stanford", "UCB"];
+qq=1;
 
-function GoFunc(e) {
+function PersonFunc(s, e) {
+	$(".content").addClass("blur");
+	$("#PageDetail").show();
+	$("#PageDetail #head").empty();
+	img = $("<img src='webdoge/" + s + "/" + $(e.children("image")[0]).text() + "' />");
+	$("#PageDetail #head").append(img);
+	$("#PageDetail #detail-content").empty();
+	e.children().each(function () {
+		x = $(this)[0].tagName;
+		if (x != "name" && x != "image") {
+			$("#PageDetail #detail-content").append($("<div>").text(x + ": " + $($(this)[0]).text()));
+		}
+	})
+}
+
+function SchoolFunc(e) {
+	school_now = e;
 	$.ajax({
 		type: "GET",
 		url: "webdoge/" + e + "/" + e + ".xml",
@@ -11,13 +28,13 @@ function GoFunc(e) {
 			$("#people").get()[0].scrollTop = 0;
 			first = [];
 			dict = new Object();
-			$(xml).find("professor name").each(function () {
-				f = $(this).text().trim()[0].toLocaleUpperCase();
+			$(xml).find("professor").each(function () {
+				f = $($(this).children("name")[0]).text().trim()[0].toLocaleUpperCase();
 				if (!dict.hasOwnProperty(f)) {
 					dict[f] = [];
 					first.push(f);
 				}
-				dict[f].push($(this).text());
+				dict[f].push($(this));
 			});
 			first.sort();
 			$.each(first, function (i, e) {
@@ -30,8 +47,8 @@ function GoFunc(e) {
 				div = $("<div id='person-" + e + "'>");
 				div.append($("<h2>").text(e));
 				$.each(dict[e], function (i, e) {
-					a = $("<a href='#' onclick='return false;'>").text(e);
-					a.click(function () {GoFunc(e);});
+					a = $("<a href='#' onclick='return false;'>").append($(e.children("name")[0]).text());
+					a.click(function () {PersonFunc(school_now, e);});
 					div.append(a);
 					div.append($("<br>"));
 				});
@@ -46,6 +63,10 @@ function GoFunc(e) {
 }
 
 $(document).ready(function() {
+	$("#PageDetail").click(function () {
+		$(this).hide();
+		$(".content").removeClass("blur");
+	});
 	first = [];
 	dict = new Object();
 	$.each(school_list, function (i, e) {
@@ -68,7 +89,7 @@ $(document).ready(function() {
 		div.append($("<h2>").text(e));
 		$.each(dict[e], function (i, e) {
 			a = $("<a href='#' onclick='return false;'>").text(e);
-			a.click(function () {GoFunc(e);});
+			a.click(function () {SchoolFunc(e);});
 			div.append(a);
 			div.append($("<br>"));
 		});
