@@ -36,7 +36,7 @@ body {
 	top: 120px;
 	bottom: 20px;
 	right: 0;
-	width: 30px;
+	width: 20px;
 }
 
 .select-table {
@@ -75,7 +75,33 @@ body {
 	bottom: 20px;
 	left: 0;
 	right: 30px;
-	overflow: hidden;
+	overflow: auto;
+}
+
+.select-content::-webkit-scrollbar-track {
+	background-color: rgba(0, 0, 0, 0.1);
+	border: none;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
+.select-content::-webkit-scrollbar-track:hover {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+.select-content::-webkit-scrollbar-thumb {
+	background-color: rgba(0, 0, 0, 0.3);
+	border: none;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
+.select-content::-webkit-scrollbar-thumb:hover {
+	background-color: rgb(33, 33, 33);
+}
+
+.select-content::-webkit-scrollbar {
+	width: 6px;
 }
 
 .select-content a {

@@ -36,9 +36,6 @@ function GoFunc(e) {
 					div.append($("<br>"));
 				});
 				$("#people").append(div);
-				if (i != first.length - 1) {
-					$("#people").append($("<hr>"));
-				}
 			});
 			$("#PageSchool").stop();
 			$("#PageSchool").animate({left: "26%"}, 300);
