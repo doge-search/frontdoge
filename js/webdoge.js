@@ -14,7 +14,7 @@ function PersonFunc(s, e) {
 	$("#PageDetail #detail-content").empty();
 	e.children().each(function () {
 		x = $(this)[0].tagName;
-		if (x != "name" && x != "image") {
+		if (x != "image") {
 			$("#PageDetail #detail-content").append($("<div>").text(x + ": " + $($(this)[0]).text()));
 		}
 	})
