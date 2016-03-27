@@ -8,6 +8,7 @@ function GoFunc(e) {
 		success: function (xml) {
 			$("#select-person").empty();
 			$("#people").empty();
+			$("#people").get()[0].scrollTop = 0;
 			first = [];
 			dict = new Object();
 			$(xml).find("professor name").each(function () {
