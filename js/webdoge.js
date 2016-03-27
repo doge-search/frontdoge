@@ -5,7 +5,11 @@ function PersonFunc(s, e) {
 	$(".content").addClass("blur");
 	$("#PageDetail").show();
 	$("#PageDetail #head").empty();
-	img = $("<img src='webdoge/" + s + "/" + $(e.children("image")[0]).text() + "' />");
+	if (e.children("image").length != 0) {
+		img = $("<img src='webdoge/" + s + "/" + $(e.children("image")[0]).text() + "' />");
+	} else {
+		img = $("<img src='images/default.jpg' />");
+	}
 	$("#PageDetail #head").append(img);
 	$("#PageDetail #detail-content").empty();
 	e.children().each(function () {
