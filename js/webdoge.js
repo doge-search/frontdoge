@@ -44,8 +44,7 @@ function SchoolFunc(e) {
 				div = $("<div>").append($("<span>").text(e));
 				$("#select-person").append(div);
 				div.hover(function () {
-					$("#people").stop();
-					$("#people").animate({scrollTop: $("#person-" + e).get()[0].offsetTop - 20}, 300);
+					$("#people").stop().animate({scrollTop: $("#person-" + e).get()[0].offsetTop - 20}, 300);
 				});
 				div = $("<div id='person-" + e + "'>");
 				div.append($("<h2>").text(e));
@@ -57,10 +56,8 @@ function SchoolFunc(e) {
 				});
 				$("#people").append(div);
 			});
-			$("#PageSchool").stop();
-			$("#PageSchool").animate({left: "26%"}, 300);
-			$("#PagePerson").stop();
-			$("#PagePerson").animate({left: "74%"}, 300);
+			$("#PageSchool").stop().addClass("first", 300);
+			$("#PagePerson").stop().addClass("second", 300);
 		}
 	});
 }
@@ -85,8 +82,7 @@ $(document).ready(function() {
 		div = $("<div>").append($("<span>").text(e));
 		$("#select-school").append(div);
 		div.hover(function () {
-			$("#schools").stop();
-			$("#schools").animate({scrollTop: $("#school-" + e).get()[0].offsetTop - 20}, 300);
+			$("#schools").stop().animate({scrollTop: $("#school-" + e).get()[0].offsetTop - 20}, 300);
 		});
 		div = $("<div id='school-" + e + "'>");
 		div.append($("<h2>").text(e));

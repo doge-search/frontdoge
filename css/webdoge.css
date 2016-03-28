@@ -13,24 +13,51 @@ body {
 	overflow: hidden;
 }
 
-.page {
-	position: absolute;
-	width: 5%;
-	left: 50%;
-	top: 50px;
-	bottom: 50px;
+@media (orientation: landscape) {
+	.page {
+		position: absolute;
+		width: 45%;
+		left: 27.5%;
+		top: 50px;
+		bottom: 50px;
+	}
+
+	.page.first {
+		left: 3.5%;
+	}
+
+	.page.second {
+		left: 51.5%;
+	}
+}
+
+@media not all and (orientation: landscape) {
+	.page {
+		position: absolute;
+		height: 45%;
+		top: 27.5%;
+		left: 50px;
+		right: 50px;
+	}
+
+	.page.first {
+		top: 3.5%;
+	}
+
+	.page.second {
+		top: 51.5%;
+	}
 }
 
 .page > .container {
 	position: absolute;
-	width: 900%;
 	height: 100%;
+	width: 100%;
 	border: none;
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	box-shadow: 3px 3px 10px rgba(211, 211, 211, 0.5);
 	background-color: rgb(244, 244, 244);
-	margin-left: -450%;
 }
 
 .page > .container > .padding {
@@ -46,6 +73,7 @@ body {
 	bottom: 20px;
 	right: 0;
 	width: 20px;
+	overflow: hidden;
 }
 
 .select-table {
