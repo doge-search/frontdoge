@@ -84,21 +84,32 @@ body {
 	bottom: 20px;
 	left: 0;
 	right: 30px;
-	overflow: auto;
+	overflow-y: auto;
 }
 
 .select-content::-webkit-scrollbar-track {
-	background-color: rgba(0, 0, 0, 0.1);
+	background-color: transparent;
 	border: none;
 	border-radius: 3px;
 	-moz-border-radius: 3px;
+}
+
+.select-content::-webkit-scrollbar-thumb {
+	background-color: transparent;
+	border: none;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
+.select-content:hover::-webkit-scrollbar-track {
+	background-color: rgba(0, 0, 0, 0.1);
 }
 
 .select-content::-webkit-scrollbar-track:hover {
 	background-color: rgba(0, 0, 0, 0.2);
 }
 
-.select-content::-webkit-scrollbar-thumb {
+.select-content:hover::-webkit-scrollbar-thumb {
 	background-color: rgba(0, 0, 0, 0.3);
 	border: none;
 	border-radius: 3px;

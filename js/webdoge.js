@@ -1,4 +1,4 @@
-school_list = ["MIT", "Stanford", "UCB"];
+school_list = ["MIT", "Stanford", "UCB", "Princeton"];
 
 function PersonFunc(s, e) {
 	$(".content").addClass("blur");
