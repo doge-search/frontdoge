@@ -44,7 +44,7 @@ function get_left(new_left) {
 					}
 				}
 				tr_list[0].prepend($("<td class='score' rowspan='" + tr_list.length.toString() + "'>").text(data[i]["papers"]));
-				tr_list[0].prepend($("<td class='id' rowspan='" + tr_list.length.toString() + "'>").text((now_left + i).toString()));
+				tr_list[0].prepend($("<td class='id' rowspan='" + tr_list.length.toString() + "'>").text((now_left + i + 1).toString()));
 				if (i != data.length - 1) {
 					tr_list[tr_list.length - 1].addClass("border");
 				}
