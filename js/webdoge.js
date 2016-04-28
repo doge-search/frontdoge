@@ -55,6 +55,16 @@ function get_left(new_left) {
 	});
 }
 
+function get_group_a(ids, name) {
+	a = $("<a href='#" + ids + "'>").text(name);
+	a.click(function () {
+		$("#name").val("groupid:" + ids);
+		get_left(0);
+		get_right(0);
+	});
+	return a;
+}
+
 function get_right(new_right) {
 	now_right = new_right;
 	$.ajax({
@@ -89,11 +99,12 @@ function get_right(new_right) {
 				data.pop();
 			}
 			for (i = 0; i < data.length; i++) {
+				a = get_group_a(data[i]["id"].toString(), data[i]["name"]);
 				$("#group .main > table").append(
 						$("<tr>").append(
 							$("<td>").text(data[i]["school"])
 							).append(
-								$("<td>").text(data[i]["name"])
+								$("<td>").append(a)
 								)
 						);
 			}
