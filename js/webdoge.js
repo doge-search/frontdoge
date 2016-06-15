@@ -1,7 +1,110 @@
 now_left = 0;
 now_right = 0;
-prof_list = ["name", "school", "title", "office", "email",
-		  "phone", "website"];
+prof_list = [
+	"name", "school", "title", "office", "email",
+	"phone", "website", "rank"
+];
+wd_list = [
+	"subfields",
+	"h-index",
+	"h-index-2011",
+	"citation-count",
+	"citation-count-2011",
+	"histogram",
+	"rising-star",
+	"paper-count",
+	"paper-count-2011",
+	"rank-a-paper-count",
+	"rank-a-paper-count-2011"
+];
+ssy_list = [
+	"acm-fellow",
+	"ieee-fellow",
+	"nsf-funding"
+];
+
+
+function show_person(data) {
+	return function () {
+		$(".content").addClass("blur");
+		$("#detail").show();
+		$("#detail #detail-content").empty();
+		$("#detail #detail-content").append($("<div>").append($("<h3>").text("Information")));
+		for (j = 0; j < prof_list.length; j++) {
+			if (data[prof_list[j]]) {
+				$("#detail #detail-content").append($("<div>").text(prof_list[j] + ": " + data[prof_list[j]]));
+			}
+		}
+		if (data["group"] != "|") {
+			$("#detail #detail-content").append($("<hr>"));
+			$("#detail #detail-content").append($("<div>").append($("<h3>").text("Group")));
+			$.ajax({
+				type: "GET",
+				url: "/prof_group",
+				data: {
+					"ids": data["group"]
+				},
+				async: false,
+				dataType: "json",
+				success: function (data) {
+					$.each(data, function (i, e) {
+						$("#detail #detail-content").append($("<div>").text(e["name"]));
+					});
+				}
+			});
+		}
+		flag = true;
+		for (j = 0; j < ssy_list.length; j++) {
+			if (data[ssy_list[j]]) {
+				if (flag) {
+					flag = false;
+					$("#detail #detail-content").append($("<hr>"));
+				}
+				$("#detail #detail-content").append($("<div>").text(ssy_list[j] + ": " +
+							(data[ssy_list[j]] == "True" ? "Yes" : "No")));
+			}
+		}
+		flag = true;
+		for (j = 0; j < wd_list.length; j++) {
+			if (data[wd_list[j]]) {
+				if (flag) {
+					flag = false;
+					$("#detail #detail-content").append($("<hr>"));
+				}
+				$("#detail #detail-content").append($("<div>").text(wd_list[j] + ": " + data[wd_list[j]]));
+			}
+		}
+	}
+}
+
+function show_group(ids, names, name, school) {
+	return function () {
+		$(".content").addClass("blur");
+		$("#detail").show();
+		$("#detail #detail-content").empty();
+		$("#detail #detail-content").append($("<div>").append($("<h3>").text("Information")));
+		$("#detail #detail-content").append($("<div>").text("name: " + name));
+		$("#detail #detail-content").append($("<div>").text("school: " + school));
+		if (ids != "|") {
+			$("#detail #detail-content").append($("<hr>"));
+			$("#detail #detail-content").append($("<div>").append($("<h3>").text("Professors")));
+			$.ajax({
+				type: "GET",
+				url: "/group_prof",
+				data: {
+					"ids": ids
+				},
+				async: false,
+				dataType: "json",
+				success: function (data) {
+					$.each(data, function (i, e) {
+						$("#detail #detail-content").append($("<div>").text(e["name"]));
+					});
+				}
+			});
+		}
+	}
+}
 
 function get_left(new_left) {
 	now_left = new_left;
@@ -40,7 +143,13 @@ function get_left(new_left) {
 				tr_list = [];
 				for (j = 0; j < prof_list.length; j++) {
 					if (data[i][prof_list[j]]) {
-						tr_list.push($("<tr>").append($("<td>").text(data[i][prof_list[j]])));
+						if (prof_list[j] == "name") {
+							a = $("<a class='name' href='#' onclick='return false;'>").text(data[i][prof_list[j]]);
+							a.click(show_person(data[i]));
+							tr_list.push($("<tr>").append($("<td>").append(a)));
+						} else {
+							tr_list.push($("<tr>").append($("<td>").text(data[i][prof_list[j]])));
+						}
 					}
 				}
 				tr_list[0].prepend($("<td class='score' rowspan='" + tr_list.length.toString() + "'>").text(data[i]["papers"]));
@@ -55,13 +164,9 @@ function get_left(new_left) {
 	});
 }
 
-function get_group_a(ids, name) {
-	a = $("<a href='#" + ids + "'>").text(name);
-	a.click(function () {
-		$("#name").val("groupid:" + ids);
-		get_left(0);
-		get_right(0);
-	});
+function get_group_a(ids, names, name, school) {
+	a = $("<a href='#'>").text(name);
+	a.click(show_group(ids, names, name, school));
 	return a;
 }
 
@@ -99,10 +204,10 @@ function get_right(new_right) {
 				data.pop();
 			}
 			for (i = 0; i < data.length; i++) {
-				a = get_group_a(data[i]["id"].toString(), data[i]["name"]);
+				a = get_group_a(data[i]["prof_id"], data[i]["prof_name"], data[i]["name"], data[i]["school"]);
 				$("#group .main > table").append(
 						$("<tr>").append(
-							$("<td>").text(data[i]["school"])
+							$("<td>").append($("<a href='2/" + data[i]["school"] + ".html'>").text(data[i]["school"]))
 							).append(
 								$("<td>").append(a)
 								)
@@ -113,12 +218,25 @@ function get_right(new_right) {
 	});
 }
 
+val = "";
+function update() {
+	now_val = $("#name").val();
+	if (val != now_val) {
+		val = now_val;
+		get_left(0);
+		get_right(0);
+	}
+	setTimeout(update, 1000);
+}
 $(document).ready(function () {
 	get_left(0);
 	get_right(0);
 
-	$("#name").keyup(function () {
-		get_left(0);
-		get_right(0);
+	$("#detail").click(function () {
+		$(this).hide();
+		$(".content").removeClass("blur");
+
 	});
+
+	setTimeout(update, 1000);
 });

@@ -1,5 +1,5 @@
 body {
-	background-color: #abb6af;
+	background-color: #ddece3;
 	font-family: Arial;
 	overflow: hidden;
 }
@@ -47,7 +47,7 @@ div.selector {
 	right: 0;
 	top: 0;
 	height: 80px;
-	background-color: #44423f;
+	background-color: #4a464e;
 }
 
 div.selector > h1 {
@@ -78,7 +78,7 @@ div.selector > div.controller > input[type='text']:focus {
 	box-shadow: 0px 0px 30px rgba(211, 211, 211, 1);
 }
 
-div.container {
+div.content div.container {
 	position: absolute;
 	left: 20px;
 	right: 20px;
@@ -90,7 +90,7 @@ div.container {
 	background-color: rgb(244, 244, 244);
 }
 
-div.container > .main {
+div.content div.container > .main {
 	position: absolute;
 	top: 20px;
 	left: 30px;
@@ -100,29 +100,34 @@ div.container > .main {
 	padding: 0 10px 0 10px;
 }
 
-div.container > .main > table {
+div.content div.container > .main > table {
 	width: 100%;
 	border-collapse: collapse;
 }
 
-div.container > .main > table td {
+div.content div.container > .main > table td {
 	vertical-align: middle;
 	word-wrap: break-word;
 	word-break: break-all;
 	min-width: 160px;
 }
 
-div.container > .main > table td.id {
+div.content div.container > .main > table td > a.name {
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
+div.content div.container > .main > table td.id {
 	min-width: 45px;
 	text-align: center;
 }
 
-div.container > .main > table tr.border {
+div.content div.container > .main > table tr.border {
 	border-style: solid;
 	border-width: 0 0 1px 0;
 }
 
-div.container > .footer {
+div.content div.container > .footer {
 	position: absolute;
 	height: 50px;
 	left: 20px;
@@ -130,19 +135,19 @@ div.container > .footer {
 	bottom: 0;
 }
 
-div.container > .footer > div {
+div.content div.container > .footer > div {
 	display: table;
 	width: 100%;
 }
 
-div.container > .footer > div > a {
+div.content div.container > .footer > div > a {
 	display: table-cell;
 	text-align: center;
 	vertical-align: middle;
 	width: 50%;
 }
 
-div.container > .footer > div > a.inactive {
+div.content div.container > .footer > div > a.inactive {
 	cursor: default;
 	text-decoration: none;
 	color: grey;
@@ -167,4 +172,53 @@ div.right {
 	top: 80px;
 	bottom: 0;
 	right: 8px;
+}
+
+.content {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	overflow: hidden;
+}
+
+.fullscreen {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	display: none;
+	background-color: rgba(0, 0, 0, 0.6);
+	z-index: 100;
+}
+
+.fullscreen > .container {
+	position: absolute;
+	left: 50%;
+	top: 20%;
+	height: 60%;
+}
+
+.fullscreen > .container > .padding {
+	width: 100%;
+	height: 100%;
+	margin-left: -50%;
+}
+
+#detail-content {
+	color: rgb(244, 244, 244);
+	text-align: center;
+	width: 100%;
+	height: 100%;
+	overflow-y: auto;
+}
+
+.blur {
+	-moz-filter: blur(3px);
+	-webkit-filter: blur(3px);
+	-o-filter: blur(3px);
+	-ms-filter: blur(3px);
+	filter: blur(3px);
 }
