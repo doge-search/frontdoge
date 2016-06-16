@@ -32,7 +32,15 @@ function show_person(data) {
 		$("#detail #detail-content").append($("<div>").append($("<h3>").text("Information")));
 		for (j = 0; j < prof_list.length; j++) {
 			if (data[prof_list[j]]) {
-				$("#detail #detail-content").append($("<div>").text(prof_list[j] + ": " + data[prof_list[j]]));
+				if (prof_list[j] == 'website') {
+					$("#detail #detail-content").append($("<div>").append(
+								$("<span>").text(prof_list[j] + ": ")).append(
+								$("<a target='_blank'>").text(data[prof_list[j]])
+								.attr("href", data[prof_list[j]])
+								));
+				} else {
+					$("#detail #detail-content").append($("<div>").text(prof_list[j] + ": " + data[prof_list[j]]));
+				}
 			}
 		}
 		if (data["group"] != "|") {
@@ -106,6 +114,8 @@ function show_group(ids, names, name, school) {
 	}
 }
 
+group = "";
+
 function get_left(new_left) {
 	now_left = new_left;
 	$.ajax({
@@ -113,6 +123,7 @@ function get_left(new_left) {
 		url: "/prof_list",
 		data: {
 			"search": $("#name").val(),
+			"group": group,
 			"skip": now_left
 		},
 		dataType: "json",
@@ -135,7 +146,7 @@ function get_left(new_left) {
 				$("#prof a#next").removeClass("inactive");
 				$("#prof a#next").unbind("click");
 				$("#prof a#next").click(function () {
-					get_left(now_left +10);
+					get_left(now_left + 10);
 				});
 				data.pop();
 			}
@@ -147,6 +158,11 @@ function get_left(new_left) {
 							a = $("<a class='name' href='#' onclick='return false;'>").text(data[i][prof_list[j]]);
 							a.click(show_person(data[i]));
 							tr_list.push($("<tr>").append($("<td>").append(a)));
+						} else if (prof_list[j] == "website") {
+							tr_list.push($("<tr>").append($("<td>").append(
+											$("<a target='_blank'>").text(data[i][prof_list[j]])
+											.attr("href", data[i][prof_list[j]])
+											)));
 						} else {
 							tr_list.push($("<tr>").append($("<td>").text(data[i][prof_list[j]])));
 						}
@@ -164,9 +180,13 @@ function get_left(new_left) {
 	});
 }
 
-function get_group_a(ids, names, name, school) {
-	a = $("<a href='#'>").text(name);
-	a.click(show_group(ids, names, name, school));
+function get_group_a(ids, name) {
+	a = $("<a href='#" + ids.toString() + "'>").text(name);
+	//a.click(show_group(ids, names, name, school));
+	a.click(function () {
+		group = ids;
+		get_left(0);
+	});
 	return a;
 }
 
@@ -192,22 +212,23 @@ function get_right(new_right) {
 				$("#group a#prev").removeClass("inactive");
 				$("#group a#prev").unbind("click");
 				$("#group a#prev").click(function () {
-					get_right(now_right > 10 ? now_right - 10 : 0);
+					get_right(now_right > 30 ? now_right - 30 : 0);
 				});
 			}
 			if (data.length == 31) {
 				$("#group a#next").removeClass("inactive");
 				$("#group a#next").unbind("click");
 				$("#group a#next").click(function () {
-					get_right(now_right +10);
+					get_right(now_right + 30);
 				});
 				data.pop();
 			}
 			for (i = 0; i < data.length; i++) {
-				a = get_group_a(data[i]["prof_id"], data[i]["prof_name"], data[i]["name"], data[i]["school"]);
+				//a = get_group_a(data[i]["prof_id"], data[i]["prof_name"], data[i]["name"], data[i]["school"]);
+				a = get_group_a(data[i]["id"], data[i]["name"]);
 				$("#group .main > table").append(
 						$("<tr>").append(
-							$("<td>").append($("<a href='2/" + data[i]["school"] + ".html'>").text(data[i]["school"]))
+							$("<td>").append($("<a target='_blank' href='2/" + data[i]["school"] + ".html'>").text(data[i]["school"]))
 							).append(
 								$("<td>").append(a)
 								)
@@ -222,6 +243,7 @@ val = "";
 function update() {
 	now_val = $("#name").val();
 	if (val != now_val) {
+		group = "";
 		val = now_val;
 		get_left(0);
 		get_right(0);
