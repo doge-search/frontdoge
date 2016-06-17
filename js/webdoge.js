@@ -7,15 +7,9 @@ prof_list = [
 wd_list = [
 	"subfields",
 	"h-index",
-	"h-index-2011",
 	"citation-count",
-	"citation-count-2011",
-	"histogram",
-	"rising-star",
 	"paper-count",
-	"paper-count-2011",
 	"rank-a-paper-count",
-	"rank-a-paper-count-2011"
 ];
 ssy_list = [
 	"acm-fellow",
@@ -23,6 +17,7 @@ ssy_list = [
 	"nsf-funding"
 ];
 
+dblp_cont = "学校中计算机系教授在dblp上的论文得分情况，分数是dblp上该教授的所有论文作者序的倒数累加。比如第一作者权重为1，第二作者为0.5，第三作者为0.333，以此类推。该分数我们定义为active分数，该分数较高的教授说明发论文比较积极主动。如果分数为-1或0说明在dblp上没有找到相应的人，或dblp没有收录该教授的论文信息。";
 
 function show_person(data) {
 	return function () {
@@ -68,19 +63,108 @@ function show_person(data) {
 					flag = false;
 					$("#detail #detail-content").append($("<hr>"));
 				}
-				$("#detail #detail-content").append($("<div>").text(ssy_list[j] + ": " +
-							(data[ssy_list[j]] == "True" ? "Yes" : "No")));
+				ssy = data[ssy_list[j]] == 'True' ? "Yes" : "No";
+				$("#detail #detail-content").append(
+						$("<div class='" + ssy + "'>").text(
+							ssy_list[j] + ": " + ssy
+							)
+						);
 			}
 		}
 		flag = true;
 		for (j = 0; j < wd_list.length; j++) {
-			if (data[wd_list[j]]) {
+			if (data[wd_list[j]] ||
+					(data.hasOwnProperty(wd_list[j] + "-2011") &&
+					 data[wd_list[j] + "-2011"])) {
 				if (flag) {
 					flag = false;
 					$("#detail #detail-content").append($("<hr>"));
 				}
-				$("#detail #detail-content").append($("<div>").text(wd_list[j] + ": " + data[wd_list[j]]));
+				wd_cont = wd_list[j] + ": ";
+				if (data[wd_list[j]]) {
+					wd_cont += data[wd_list[j]];
+					if (data.hasOwnProperty(wd_list[j] + "-2011") &&
+							data[wd_list[j] + "-2011"]) {
+						wd_cont += " (" +
+							data[wd_list[j] + "-2011"] +
+							" after 2011)";
+					}
+				} else {
+					wd_cont += data[wd_list[j] + "-2011"] + " after 2011";
+				}
+				$("#detail #detail-content").append(
+						$("<div>").text(wd_cont)
+						);
 			}
+		}
+		if (data["histogram"]) {
+			$("#detail #detail-content").append($("<hr>"));
+			svg = $('<svg xmlns="http://www.w3.org/2000/svg" version="1.1">');
+			$("#detail #detail-content").append(
+					$("<div class='svg-container'>").append(svg)
+					);
+			svg_cont = "<text x=0 y=12>citation</text>";
+			svg_cont += "<text x=370 y=240>year</text>";
+			svg_cont += "<line x1=45 y1=0 x2=45 y2=225/>";
+			svg_cont += "<line x1=45 y1=225 x2=390 y2=225/>";
+			max_citation = Math.max.apply(null, data["histogram"]);
+			for (i = 0; i <= 4; i++) {
+				l = Math.round((i / 4) * max_citation);
+				x = 37 - l.toString().length * 7;
+				y = 230 - i * 50;
+				svg_cont += "<text x=";
+				svg_cont += x.toString();
+				svg_cont += " y=";
+				svg_cont += y.toString();
+				svg_cont += ">";
+				svg_cont += l.toString();
+				svg_cont += "</text>";
+			}
+			len = data["histogram"].length;
+			last_x = last_y = 0;
+			delta_x = 325 / len;
+			$.each(data["histogram"], function (i, e) {
+				svg_cont += "<text x=";
+				svg_cont += (delta_x * i + 45).toString();
+				svg_cont += " y=240>";
+				svg_cont += (2017 - (len - i)).toString();
+				svg_cont += "</text>";
+				svg_cont += "<circle citation=";
+				svg_cont += e.toString();
+				svg_cont += " cx=";
+				now_x = delta_x * (i + 0.5) + 45;
+				svg_cont += now_x.toString();
+				svg_cont += " cy=";
+				now_y = 225 - (e / max_citation) * 195;
+				svg_cont += now_y.toString();
+				svg_cont += " r=3/>";
+				if (i != 0) {
+					l = Math.sqrt(
+							(now_x - last_x) * (now_x - last_x) +
+							(now_y - last_y) * (now_y - last_y)
+							);
+					svg_cont += "<line";
+					if (i == len - 1) {
+						svg_cont += ' stroke-dasharray="3,3"';
+					}
+					svg_cont += " x1=";
+					svg_cont += (last_x +
+							(now_x - last_x) * 3 / l).toString();
+					svg_cont += " y1=";
+					svg_cont += (last_y +
+							(now_y - last_y) * 3 / l).toString();
+					svg_cont += " x2=";
+					svg_cont += (now_x -
+							(now_x - last_x) * 3 / l).toString();
+					svg_cont += " y2=";
+					svg_cont += (now_y -
+							(now_y - last_y) * 3 / l).toString();
+					svg_cont += "/>";
+				}
+				last_x = now_x;
+				last_y = now_y;
+			});
+			svg.html(svg_cont);
 		}
 	}
 }
@@ -168,8 +252,27 @@ function get_left(new_left) {
 						}
 					}
 				}
-				tr_list[0].prepend($("<td class='score' rowspan='" + tr_list.length.toString() + "'>").text(data[i]["papers"]));
-				tr_list[0].prepend($("<td class='id' rowspan='" + tr_list.length.toString() + "'>").text((now_left + i + 1).toString()));
+				tr_list[0].prepend(
+						$("<td rowspan='" +
+							tr_list.length.toString() +
+							"'>"
+							).append(
+								$("<a class='score'>").text(
+									data[i]["papers"]
+									)
+								).click(function () {
+								$(".content").addClass("blur");
+								$("#detail").show();
+								$("#detail #detail-content").text(
+										dblp_cont
+										);
+							})
+						);
+				tr_list[0].prepend(
+						$("<td class='id' rowspan='" +
+							tr_list.length.toString() +
+							"'>"
+							).text((now_left + i + 1).toString()));
 				if (i != data.length - 1) {
 					tr_list[tr_list.length - 1].addClass("border");
 				}
@@ -248,7 +351,7 @@ function update() {
 		get_left(0);
 		get_right(0);
 	}
-	setTimeout(update, 1000);
+	setTimeout(update, 500);
 }
 $(document).ready(function () {
 	get_left(0);
@@ -257,8 +360,13 @@ $(document).ready(function () {
 	$("#detail").click(function () {
 		$(this).hide();
 		$(".content").removeClass("blur");
-
+	});
+	$(document).keydown(function (e) {
+		if (e && e.keyCode == 27) {
+			$("#detail").hide();
+			$(".content").removeClass("blur");
+		}
 	});
 
-	setTimeout(update, 1000);
+	setTimeout(update, 500);
 });

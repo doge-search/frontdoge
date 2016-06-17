@@ -114,7 +114,7 @@ div.content div.container > .main > table td {
 
 div.content div.container > .main > table td > a.name {
 	font-weight: bold;
-	font-size: 1.1em;
+	font-size: 1.1rem;
 }
 
 div.content div.container > .main > table td.id {
@@ -154,8 +154,21 @@ div.content div.container > .footer > div > a.inactive {
 }
 
 .score {
-	font-size: 3em;
+	cursor: help;
+	font-size: 3rem;
 	color: #e83004;
+}
+
+.score:hover:after {
+	content: 'click for definition';
+	position: absolute;
+	font-size: 10px;
+	padding: 4px 6px;
+	border-radius: 5px;
+	color: rgb(235, 235, 235);
+	background-color: rgba(93, 89, 88, 0.8);
+	margin-top: 1rem;
+	margin-left: 5px;
 }
 
 div.left {
@@ -213,6 +226,41 @@ div.right {
 	width: 100%;
 	height: 100%;
 	overflow-y: auto;
+}
+
+#detail-content .Yes {
+	color: #d9f2da;
+}
+
+#detail-content .No {
+	color: #e6a4ae;
+}
+
+#detail-content .svg-container {
+	min-width: 400px;
+	height: 250px;
+	margin-right: 6px;
+}
+
+#detail-content svg {
+	width: 400px;
+	height: 250px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#detail-content svg > line {
+	stroke: rgb(240, 240, 240);
+}
+
+#detail-content svg > text {
+	fill: rgb(240, 240, 240);
+	font-size: 12px;
+}
+
+#detail-content svg > circle {
+	stroke: rgb(240, 240, 240);
+	fill: transparent;
 }
 
 .blur {
