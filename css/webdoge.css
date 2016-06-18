@@ -249,6 +249,10 @@ div.right {
 	margin-right: auto;
 }
 
+#detail-content svg > * {
+	pointer-events: none;
+}
+
 #detail-content svg > line {
 	stroke: rgb(240, 240, 240);
 }
@@ -261,6 +265,29 @@ div.right {
 #detail-content svg > circle {
 	stroke: rgb(240, 240, 240);
 	fill: transparent;
+}
+
+#detail-content svg > circle.hover {
+	stroke: none;
+	fill: none;
+	pointer-events: all;
+}
+
+#detail-content svg > circle.hover:hover {
+	fill: rgba(240, 240, 240, 0.5);
+}
+
+#detail-content svg > circle.hover:hover+circle {
+	fill: rgb(240, 240, 240);
+}
+
+#detail-content svg > circle.hover+circle+text {
+	cursor: default;
+	display: none;
+}
+
+#detail-content svg > circle.hover:hover+circle+text {
+	display: block;
 }
 
 .blur {

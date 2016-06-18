@@ -19,10 +19,13 @@ ssy_list = [
 
 dblp_cont = "学校中计算机系教授在dblp上的论文得分情况，分数是dblp上该教授的所有论文作者序的倒数累加。比如第一作者权重为1，第二作者为0.5，第三作者为0.333，以此类推。该分数我们定义为active分数，该分数较高的教授说明发论文比较积极主动。如果分数为-1或0说明在dblp上没有找到相应的人，或dblp没有收录该教授的论文信息。";
 
+rs_cont = "Average annual growth rate of citations: "
+
 function show_person(data) {
 	return function () {
 		$(".content").addClass("blur");
 		$("#detail").show();
+		$("#detail #detail-content").scrollTop(0);
 		$("#detail #detail-content").empty();
 		$("#detail #detail-content").append($("<div>").append($("<h3>").text("Information")));
 		for (j = 0; j < prof_list.length; j++) {
@@ -99,6 +102,9 @@ function show_person(data) {
 		}
 		if (data["histogram"]) {
 			$("#detail #detail-content").append($("<hr>"));
+			$("#detail #detail-content").append(
+					$("<div>").append($("<h3>").text("Citation-Year"))
+					);
 			svg = $('<svg xmlns="http://www.w3.org/2000/svg" version="1.1">');
 			$("#detail #detail-content").append(
 					$("<div class='svg-container'>").append(svg)
@@ -110,7 +116,7 @@ function show_person(data) {
 			max_citation = Math.max.apply(null, data["histogram"]);
 			for (i = 0; i <= 4; i++) {
 				l = Math.round((i / 4) * max_citation);
-				x = 37 - l.toString().length * 7;
+				x = 40 - l.toString().length * 7;
 				y = 230 - i * 50;
 				svg_cont += "<text x=";
 				svg_cont += x.toString();
@@ -129,15 +135,37 @@ function show_person(data) {
 				svg_cont += " y=240>";
 				svg_cont += (2017 - (len - i)).toString();
 				svg_cont += "</text>";
-				svg_cont += "<circle citation=";
-				svg_cont += e.toString();
-				svg_cont += " cx=";
+				svg_cont += "<circle class='hover' cx=";
 				now_x = delta_x * (i + 0.5) + 45;
 				svg_cont += now_x.toString();
 				svg_cont += " cy=";
 				now_y = 225 - (e / max_citation) * 195;
 				svg_cont += now_y.toString();
+				svg_cont += " r=10/>";
+				svg_cont += "<circle cx=";
+				svg_cont += now_x.toString();
+				svg_cont += " cy=";
+				svg_cont += now_y.toString();
 				svg_cont += " r=3/>";
+				if (i != len - 1) {
+					svg_cont += "<text x=";
+					svg_cont +=
+						(now_x - e.toString().length * 3).toString();
+					svg_cont += " y=";
+					svg_cont += (now_y - 12).toString();
+					svg_cont += ">";
+					svg_cont += e.toString();
+					svg_cont += "</text>";
+				} else {
+					svg_cont += "<text x=";
+					svg_cont +=
+						(now_x - e.toString().length * 3 - 26).toString();
+					svg_cont += " y=";
+					svg_cont += (now_y - 12).toString();
+					svg_cont += ">";
+					svg_cont += e.toString();
+					svg_cont += "(By June)</text>";
+				}
 				if (i != 0) {
 					l = Math.sqrt(
 							(now_x - last_x) * (now_x - last_x) +
@@ -165,6 +193,14 @@ function show_person(data) {
 				last_y = now_y;
 			});
 			svg.html(svg_cont);
+			if (data["rising-star"]) {
+				$("#detail #detail-content").append(
+						$("<div>").text(rs_cont)
+						);
+				$("#detail #detail-content").append(
+						$("<div>").text(data["rising-star"])
+						);
+			}
 		}
 	}
 }
